@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earthquake Data</title>
+  <style>
+    /* Add some simple styling for the output */
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Earthquake Data</h1>
+  <div id="output"></div>
+
+  <script>
+    // Use JavaScript to make a request to the earthquake calculation API
+    fetch('https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2023-01-01&endtime=2023-12-31&minmagnitude=6')
+      .then(response => response.json())
+      .then(data => {
+        // Process the data and display it on the webpage
+        const outputDiv = document.getElementById('output');
+        data.features.forEach(earthquake => {
+          const earthquakeElement = document.createElement('div');
+          earthquakeElement.innerHTML = `
+            <h2>${earthquake.properties.place}</h2>
+            <p>Magnitude: ${earthquake.properties.mag}</p>
+            <p>Time: ${new Date(earthquake.properties.time)}</p>
+          `;
+          outputDiv.appendChild(earthquakeElement);
+        });
+      })
+      .catch(error => {
+        // Handle any errors that occur during the fetch
+        console.error('Error fetching earthquake data:', error);
+      });
+  </script>
+</body>
+</html>
